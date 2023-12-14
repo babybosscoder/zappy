@@ -1,0 +1,45 @@
+clc
+clear
+clf
+n=linspace(0,2,100)
+X=zeros(length(n),length(n))
+h=n(2)-n(1);
+D=11.225 //ev
+alpha=2.5944 //ev
+m=0.8606*(931*10^6) // ev/c^2
+r0=1.128 //A
+for i=2:length(n)-1
+    X(i,i)=-2
+    X(i,i-1)=1  
+    X(i,i+1)=1
+end
+X(1,1)=-2;X(1,2)=1;X(length(n),length(n)-1)=1;X(length(n),length(n))=-2
+X=X*(1/(h^2))
+X=X*((-1973*1973)/(2*m))//eV
+V=zeros(length(n),length(n))
+for i=1:length(n)
+    n(i)=(n(i)-r0)/r0
+    V(i,i)=D*(exp(-2*n(i)*alpha)-2*exp(-alpha*n(i)))
+end
+X=X+V
+[a,b]=spec(X)
+
+disp("Eigenvalues = ",diag(b))
+
+for i=1:6
+    subplot(4,3,i)
+    plot(n,a(:,i+1)','r')
+    xgrid
+    xlabel("x(Angstrom)---->")
+    ylabel('⨚----->')
+end
+//for prob
+for i=1:6
+    subplot(4,3,i+6)
+    plot(n,a(:,i+1)'**2,'r')
+    xgrid
+    xlabel("x(Angstrom)---->")
+    ylabel('⨚----->')
+end
+/*
+plot(n,V)
