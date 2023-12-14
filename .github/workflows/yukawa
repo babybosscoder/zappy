@@ -1,0 +1,40 @@
+clc
+clear
+clf
+n=linspace(1d-10,10,1000)
+X=zeros(length(n),length(n))
+h=n(2)-n(1);
+for i=2:length(n)-1
+    X(i,i)=-2
+    X(i,i-1)=1  
+    X(i,i+1)=1
+end
+X(1,1)=-2;X(1,2)=1;X(length(n),length(n)-1)=1;X(length(n),length(n))=-2
+X=X*(1/(h^2))
+X=X*((-1973*1973)/(2*.511*10^6))//eV
+V=zeros(length(n),length(n))
+for i=1:length(n)
+    V(i,i)=-14.402/(n(i))*exp(-n(i)/3)
+end
+X=X+V
+[a,b]=spec(X)
+
+disp("Eigenvalues = ",diag(b))
+for i=1:6
+    subplot(4,3,i)
+    plot(n,a(:,i+1)','r')
+    xgrid
+    xlabel("x(Angstrom)---->")
+    ylabel('⨚----->')
+end
+
+//for probability plot
+for i=1:6
+    subplot(4,3,i+6)
+    plot(n,a(:,i+1)'**2,'r')
+    xgrid
+    xlabel("x(Angstrom)---->")
+    ylabel('⨚----->')
+end
+
+
